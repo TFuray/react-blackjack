@@ -3,7 +3,6 @@ import axios from 'axios'
 import Header from './components/Header'
 import StartButton from './components/StartButton'
 import GameTable from './components/GameTable'
-import { handler } from 'daisyui'
 
 function App () {
   const [deckId, setDeckId] = useState('')
