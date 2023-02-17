@@ -5,10 +5,26 @@ import StartButton from './components/StartButton'
 import GameTable from './components/GameTable'
 
 function App () {
-  const [deckId, setDeckId] = useState('')
+  const [deckId, setDeckId] = useState( ''
+    // JSON.parse(localStorage.getItem('deckId')) || ''
+  )
   const [error, setError] = useState(null)
   const [dealerHand, setDealerHand] = useState([])
   const [playerHand, setPlayerHand] = useState([])
+
+  const convertToNum = val => {
+    if (val === 'ACE') {
+      return 10
+    } else if (val === 'KING') {
+      return 10
+    } else if (val === 'QUEEN') {
+      return 10
+    } else if (val === 'JACK') {
+      return 10
+    } else {
+      return Number(val)
+    }
+  }
 
   const getDeckId = async () => {
     try {
@@ -20,6 +36,17 @@ function App () {
     } catch (err) {
       setError(err)
     }
+
+    // deckId == ''? (
+    // try {
+    //   const response = await axios.get(
+    //     'https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1'
+    //   )
+    //   setDeckId(response.data.deck_id)
+    //   localStorage.setItem('deckId', JSON.stringify(response.data.deck_id))
+    // } catch (err) {
+    //   setError(err)
+    // }) :
   }
 
   const dealDealerHand = async () => {
@@ -55,7 +82,13 @@ function App () {
     } catch (err) {
       setError(err)
     }
+    checkBustPlayer()
   }
+
+  const checkBustPlayer = () => {
+    
+  }
+
   const hitDealer = async () => {
     try {
       const response = await axios.get(
@@ -86,6 +119,7 @@ function App () {
           playerHand={playerHand}
           hitDealer={hitDealer}
           hitPlayer={hitPlayer}
+          convertToNum={convertToNum}
         />
       </div>
     </div>

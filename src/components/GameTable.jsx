@@ -9,6 +9,7 @@ const GameTable = ({
   playerHand,
   hitDealer,
   hitPlayer,
+  convertToNum,
 }) => {
   return (
     <div>
@@ -17,7 +18,7 @@ const GameTable = ({
       </div>
 
       <div>
-        <PlayerHand playerHand={playerHand} />
+        <PlayerHand convertToNum={convertToNum} playerHand={playerHand} />
       </div>
       <div>
         <button
