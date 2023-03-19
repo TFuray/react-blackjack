@@ -4,13 +4,21 @@ import Header from './components/Header'
 import StartButton from './components/StartButton'
 import GameTable from './components/GameTable'
 
-function App () {
-  const [deckId, setDeckId] = useState( ''
+function App() {
+  const [deckId, setDeckId] = useState(
+    ''
     // JSON.parse(localStorage.getItem('deckId')) || ''
   )
   const [error, setError] = useState(null)
   const [dealerHand, setDealerHand] = useState([])
   const [playerHand, setPlayerHand] = useState([])
+
+  // useEffect(() => {
+  //   checkBustPlayer(calcHandTotal(playerHand))
+  //   {
+  //     resetPlay()
+  //   }
+  // }, [playerHand])
 
   const convertToNum = val => {
     if (val === 'ACE') {
@@ -24,6 +32,18 @@ function App () {
     } else {
       return Number(val)
     }
+  }
+
+  const calcHandTotal = (hand) => {
+    let total = 0
+    hand.forEach(card => {
+      if (card.value === 'ACE' || 'KING' || 'QUEEN' || 'JACK') {
+        total += convertToNum(card.value)
+      } else {
+        total += card.value
+      }
+    })
+    return total
   }
 
   const getDeckId = async () => {
@@ -77,16 +97,28 @@ function App () {
       const response = await axios.get(
         `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
       )
-      setPlayerHand([...playerHand, response.data.cards[0]])
-      console.log(hand)
+      setPlayerHand([...playerHand, response.data.cards[0]], checkBustPlayer(calcHandTotal(playerHand)))
     } catch (err) {
       setError(err)
     }
-    checkBustPlayer()
+
   }
 
-  const checkBustPlayer = () => {
-    
+  const checkBustPlayer = handTotal => {
+    if (handTotal > 21) {
+      alert('You busted!')
+      resetPlay()
+    }
+
+  }
+
+
+
+  const resetPlay = () => {
+    setDealerHand([])
+    setPlayerHand([])
+    dealPlayerHand()
+    dealDealerHand()
   }
 
   const hitDealer = async () => {
@@ -95,7 +127,7 @@ function App () {
         `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
       )
       setDealerHand([...dealerHand, response.data.cards[0]])
-      console.log(hand)
+      console.log(dealerHand)
     } catch (err) {
       setError(err)
     }
@@ -120,6 +152,7 @@ function App () {
           hitDealer={hitDealer}
           hitPlayer={hitPlayer}
           convertToNum={convertToNum}
+          calcHandTotal={calcHandTotal}
         />
       </div>
     </div>

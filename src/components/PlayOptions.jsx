@@ -8,7 +8,7 @@ const PlayOptions = ({ hitPlayer, hitDealer }) => {
           </button>
         </li>
         <li>
-          <button className="btn btn-secondary">Stand</button>
+          <button onClick={() => hitDealer()} className="btn btn-secondary">Stand</button>
         </li>
       </ul>
     </div>
